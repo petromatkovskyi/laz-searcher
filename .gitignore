@@ -91,6 +91,6 @@ typings/
 # Electron-Forge
 out/
 
-/cred/**
+*/cred/**
 
 token.json

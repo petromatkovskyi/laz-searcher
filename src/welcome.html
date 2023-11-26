@@ -9,11 +9,15 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
-    <title>Welcome Page</title>
+    <title>Auth Page</title>
   </head>
   <body>
-    <h1>Welcome</h1>
-    <button id="auth" class="btn btn-info">Auth</button>
+    <div class="container">
+      <h1>Welcome</h1>
+      <p>Please log in and give me access to your sheets</p>
+      <button id="auth" class="btn btn-info">Log in</button>
+    </div>
+
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const authBtn = document.querySelector('#auth');

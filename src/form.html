@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <title>Searcher</title>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="text-center">
+        Welcome to App which would try to simplify your work routine
+      </h2>
+      <div class="row">
+        <form class="mb-3 col-8" id="setupsForm">
+          <div class="input-group mb-3">
+            <input
+              type="radio"
+              class="btn-check change-event"
+              name="path-check"
+              id="root-path"
+              autocomplete="off"
+              value="root"
+            />
+            <label class="btn btn-outline-info rounded-start" for="root-path">Root</label>
+            <input
+              type="radio"
+              class="btn-check change-event"
+              name="path-check"
+              id="direct-path"
+              autocomplete="off"
+              value="direct"
+            />
+            <label class="btn btn-outline-primary" for="direct-path">Direct</label>
+          </div>
+
+          <div class="input-group mb-3">
+            <label for="rootSearchingPath">
+              <span class="input-group-text rounded-start rounded-0">Server</span>
+            </label>
+            <input
+              id="rootSearchingPath"
+              type="text"
+              class="form-control change-event bg-light"
+              placeholder="Root searching path"
+              aria-label="Root searching path"
+              disabled
+              required
+            />
+            <button id="rootSearchingPathBtn" class="btn btn-info" type="button">
+              Choose Searching Path 🔍
+            </button>
+          </div>
+          <div class="input-group mb-3">
+            <label for="rootDestPath">
+              <span class="input-group-text rounded-start rounded-0">Local</span>
+            </label>
+            <input
+              id="rootDestPath"
+              type="text"
+              class="form-control change-event bg-light"
+              placeholder="Root destination path"
+              aria-label="Root destination path"
+              disabled
+              required
+            />
+            <button id="rootDestPathBtn" class="btn btn-info" type="button">
+              Choose Destination Path 🔍
+            </button>
+          </div>
+
+          <div class="mb-3">
+            <label for="operatorName" class="form-label col-3">
+              <span class="input-group-text">Operator</span>
+            </label>
+
+            <select
+              class="form-select form-control change-event"
+              id="operatorName"
+              required
+            >
+              <option selected disabled value="">Choose...</option>
+              <option value="Матковський Петро">Матковський Петро</option>
+              <option value="Мовяка Оксана">Мовяка Оксана</option>
+              <option value="Сернюк Ірина">Сернюк Ірина</option>
+              <option value="Страз Ольга">Страз Ольга</option>
+              <option value="Бучелюк Ксенія">Бучелюк Ксенія</option>
+              <option value="Лісник Вікторія">Лісник Вікторія</option>
+              <option value="Жук Вікторія">Жук Вікторія</option>
+              <option value="Марзанич Наталія">Марзанич Наталія</option>
+            </select>
+            <div class="invalid-feedback">Please select a valid state.</div>
+          </div>
+          <div class="input-group mb-3">
+            <label for="sheetLink">
+              <span class="input-group-text rounded-start rounded-0"
+                >Spreadsheet link</span
+              >
+            </label>
+            <input
+              id="sheetLink"
+              type="text"
+              class="form-control change-event"
+              placeholder="Sheet link"
+              aria-label="Sheet link"
+              required
+            />
+          </div>
+          <div class="input-group mb-3">
+            <label for="spreadsheetId">
+              <span class="input-group-text rounded-start rounded-0">Spreadsheet Id</span>
+            </label>
+            <input
+              id="spreadsheetId"
+              type="text"
+              class="form-control change-event bg-light"
+              placeholder="Sheet ID"
+              aria-label="Sheet ID"
+              disabled
+              readonly
+              required
+            />
+            <span class="input-group-text bg-warning"
+              >The ID is taken from the link above</span
+            >
+          </div>
+          <!-- <div class="input-group mb-3">
+            <label for="sheetName">
+              <span class="input-group-text rounded-start rounded-0">Sheet name</span>
+            </label>
+            <input
+              id="sheetName"
+              type="text"
+              class="form-control change-event"
+              placeholder="Sheet Name"
+              aria-label="Sheet Name"
+              required
+            />
+          </div> -->
+          <div class="mb-3">
+            <label for="sheetName1" class="form-label">
+              <span class="input-group-text">Sheet Name</span>
+            </label>
+
+            <select
+              class="form-select form-control change-event"
+              id="sheetName1"
+              required
+            ></select>
+          </div>
+
+          <button class="btn btn-success col-3" id="saveBtn" type="submit" disabled>
+            Save
+          </button>
+          <div id="form-feedback"></div>
+        </form>
+        <div class="col-4">
+          <h4 class="text-center">Tutorial</h4>
+          <ul>
+            <li>
+              Choose "Root" or "Direct" path for copying new files.
+              <ol>
+                <li>
+                  Program has ability to choosing required folder through project based on
+                  'block' structure of folder tree for instance:<br />
+                  Root project folder(you set) -> 'Block'(takes from spreadsheet) ->
+                  laz(has to be in any block directory) -> .laz files.<br />
+                  If project has the same folder structure choose <b>'Root'</b>.<br />
+                  <i><b>SERVER/project-folder/</b></i
+                  ><br />
+                </li>
+                <li>
+                  But if structure is different choose <b>'Direct'</b> and set path to
+                  laz-folder (including) manually. Path should looks like<br />
+                  <i><b>SERVER/project-folder/some/intermediate/folders/LAZ/</b></i>
+                </li>
+              </ol>
+            </li>
+            <li>
+              Choose root project path for pasting files. Program will create 'block'
+              folder and folders for new files start with 1.
+              <b>Files will be copied and unarchive from .laz to .las automatically.</b>
+            </li>
+            <li>Select the name of the operator for which you want to find new files.</li>
+            <li>Paste link to project spreadsheet</li>
+            <li>Select sheet name where file names is located</li>
+            <li>After any changes don't forget save new setups</li>
+            <li>
+              Now you ready for searching new files in spreadsheet and download files to
+              your work machine
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <button class="btn btn-dark" id="findBtn">Find new Files</button>
+      <button class="btn btn-primary" id="acceptBtn">Download Files</button>
+      <div id="table-feedback"></div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <!-- <th scope="col">Select</th> -->
+            <th scope="col">Row #</th>
+            <th scope="col">Block</th>
+            <th scope="col">Section</th>
+            <th scope="col">Operator</th>
+            <th scope="col">Done</th>
+            <th scope="col">Check</th>
+            <th scope="col">Downloaded</th>
+          </tr>
+        </thead>
+        <tbody id="rows-container"></tbody>
+      </table>
+    </div>
+
+    <template id="row-template">
+      <tr data-id>
+        <!-- <td scope="row" data-select>
+          <input class="form-check-input" type="checkbox" />
+        </td> -->
+        <td scope="row" data-row></td>
+        <td data-block></td>
+        <td data-section></td>
+        <td data-operator></td>
+        <td data-done></td>
+        <td data-check></td>
+        <td data-downloaded>
+          <span class="p-2 text-center bg-light rounded-2">Waiting</span>
+        </td>
+      </tr>
+    </template>
+
+    <script>
+      const inputs = document.querySelectorAll('.change-event');
+      const setupsForm = document.querySelector('#setupsForm');
+      const saveBtn = document.querySelector('#saveBtn');
+      const findBtn = document.querySelector('#findBtn');
+      const downloadBtn = document.querySelector('#acceptBtn');
+      const rowContainer = document.querySelector('#rows-container');
+      const rowTemplate = document.querySelector('#row-template');
+      const rootSearchingPathInput = document.querySelector('#rootSearchingPath');
+      const rootSearchingPathBtn = document.querySelector('#rootSearchingPathBtn');
+      const rootDestPathInput = document.querySelector('#rootDestPath');
+      const rootDestPathBtn = document.querySelector('#rootDestPathBtn');
+      const spreadsheetLinkInput = document.querySelector('#sheetLink');
+      const operatorNameInput = document.querySelector('#operatorName');
+      const spreadsheetIdInput = document.querySelector('#spreadsheetId');
+      // const sheetNameInput = document.querySelector('#sheetName');
+      const formFeedback = document.querySelector('#form-feedback');
+      const tableFeedback = document.querySelector('#table-feedback');
+      const pathCheckBtns = [...document.querySelectorAll('[name=path-check]')];
+      const sheetNamesContainer = document.querySelector('#sheetName1');
+      const [rootPathBtn, directPathBtn] = pathCheckBtns;
+
+      const newSections = {
+        block: '',
+        fileNames: [],
+      };
+
+      // const newSections = {
+      //   block: 'part_1',
+      //   fileNames: ['N-34-124-A-d-2-2-1-2', 'N-34-124-A-d-2-2-1-1'],
+      // };
+      // const rows = [
+      //   {
+      //     block: 'PART_1',
+      //     check: undefined,
+      //     done: '0,000',
+      //     num: 2402,
+      //     operator: 'Жук Вікторія',
+      //     section: 'N-34-124-A-d-2-2-1-2',
+      //   },
+      //   {
+      //     block: 'PART_1',
+      //     check: undefined,
+      //     done: '0,000',
+      //     num: 2402,
+      //     operator: 'Жук Вікторія',
+      //     section: 'N-34-124-A-d-2-2-1-1',
+      //   },
+      // ];
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        // renderRows(rows);
+
+        //
+        const setups = await api.getSetups();
+        const {
+          rootSearchingPath,
+          rootDestPath,
+          operatorName,
+          spreadsheetLink,
+          spreadsheetId,
+          sheetName,
+          pathType,
+        } = setups;
+
+        rootSearchingPathInput.value = rootSearchingPath;
+        rootDestPathInput.value = rootDestPath;
+        operatorNameInput.value = operatorName;
+        spreadsheetLinkInput.value = spreadsheetLink;
+        spreadsheetIdInput.value = spreadsheetId;
+        // sheetNameInput.value = sheetName;
+
+        pathType === 'root'
+          ? (rootPathBtn.checked = true)
+          : (directPathBtn.checked = true);
+
+        if (spreadsheetId) {
+          const sheetTitles = await api.getSheetTitles();
+          sheetTitles.length && renderSheetTitles(sheetTitles, sheetName);
+        }
+
+        inputs.forEach((input) => {
+          input.addEventListener('change', () => {
+            saveBtn.removeAttribute('disabled');
+            findBtn.setAttribute('disabled', true);
+            removeResults();
+          });
+        });
+      });
+
+      findBtn.addEventListener('click', async () => {
+        const rows = await api.findNewFiles();
+        if (rows.length) {
+          newSections.block = rows[0].block;
+          newSections.fileNames = rows.map((row) => row.section);
+          renderRows(rows);
+        } else {
+          rowContainer.innerHTML =
+            "<tr><td colspan='7'><h1>There isn't any new files</h1></td></tr>";
+        }
+      });
+
+      downloadBtn.addEventListener('click', async () => {
+        if (newSections.block && newSections.fileNames.length) {
+          console.log(newSections);
+          const foldersPaths = await api.checkFolders(newSections);
+          console.log(foldersPaths);
+
+          if (foldersPaths.searchingPath && foldersPaths.destinationFolderPath) {
+            for (const fileName of newSections.fileNames) {
+              changeLabelStatus(fileName, 'start');
+
+              const res = await api.downloadFile({
+                foldersPaths,
+                fileName,
+              });
+              console.log(res);
+              changeLabelStatus(fileName, res ? 'success' : 'error');
+            }
+
+            api.unArchive(foldersPaths.destinationFolderPath);
+          }
+
+          // renderTableFeedback(res);
+        }
+      });
+
+      rootSearchingPathBtn.addEventListener('click', async () => {
+        const path = await api.choosePath();
+        if (path) {
+          rootSearchingPathInput.value = path;
+          saveBtn.removeAttribute('disabled');
+          findBtn.setAttribute('disabled', true);
+          removeResults();
+        }
+      });
+
+      rootDestPathBtn.addEventListener('click', async () => {
+        const path = await api.choosePath();
+        if (path) {
+          rootDestPathInput.value = path;
+          saveBtn.removeAttribute('disabled');
+          findBtn.setAttribute('disabled', true);
+          removeResults();
+        }
+      });
+
+      setupsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const regex = /\/d\/([a-zA-Z0-9-_]+)\//;
+        const match = spreadsheetLinkInput.value.match(regex);
+
+        if (match && match[1]) {
+          const setups = {
+            rootSearchingPath: rootSearchingPathInput.value,
+            rootDestPath: rootDestPathInput.value,
+            operatorName: operatorNameInput.value,
+            spreadsheetLink: spreadsheetLinkInput.value,
+            spreadsheetId: match[1],
+            sheetName: sheetNamesContainer.value,
+            pathType: pathCheckBtns.reduce(
+              (prevValue, curEl) => (curEl.checked ? curEl.value : prevValue),
+              ''
+            ),
+          };
+
+          findBtn.removeAttribute('disabled');
+          const feedback = await api.saveSetups(setups);
+
+          renderFormFeedback(feedback);
+
+          saveBtn.setAttribute('disabled', 'true');
+        } else {
+          console.log('Не вдалося отримати Spreadsheet ID.');
+        }
+      });
+
+      spreadsheetLinkInput.addEventListener('change', async (e) => {
+        const regex = /\/d\/([a-zA-Z0-9-_]+)\//;
+        const match = e.target.value.match(regex);
+        if (match && match[1]) {
+          spreadsheetIdInput.value = match[1];
+
+          const sheetTitles = await api.getSheetTitles({ spreadsheetId: match[1] });
+
+          sheetTitles.length && renderSheetTitles(sheetTitles);
+        }
+      });
+
+      function renderRows(rows) {
+        rowContainer.innerHTML = '';
+        rows.forEach((row) => renderRow(row));
+      }
+
+      function renderRow(row) {
+        const localContainer = rowContainer;
+        const element = rowTemplate.content.cloneNode(true);
+        const rowElement = element.querySelector('tr');
+
+        setValue('id', `_${row.section}`, { parent: element });
+        setValue('row', row.num, { parent: element });
+        setValue('block', row.block, { parent: element });
+        setValue('section', row.section, { parent: element });
+        setValue('operator', row.operator, { parent: element });
+        setValue('done', row.done, { parent: element });
+        setValue('check', row.check, { parent: element });
+
+        localContainer.append(element);
+      }
+
+      function setValue(selector, value, { parent = document } = {}) {
+        const element = parent.querySelector(`[data-${selector}]`);
+
+        if (selector !== 'id') {
+          element.textContent = value;
+        } else {
+          element.dataset.id = value;
+          element.setAttribute('id', value);
+        }
+      }
+
+      function renderFormFeedback(feedback) {
+        const { success, message } = feedback;
+
+        formFeedback.innerHTML = '';
+
+        const element = document.createElement('p');
+        element.innerHTML = message;
+        element.classList.add('fs-5');
+
+        success
+          ? element.classList.add('text-success')
+          : element.classList.add('text-danger');
+
+        formFeedback.append(element);
+
+        setTimeout(() => {
+          formFeedback.innerHTML = '';
+        }, 4000);
+      }
+
+      function renderTableFeedback(feedback) {
+        tableFeedback.innerHTML = '';
+
+        const element = document.createElement('p');
+        element.classList.add('fs-5');
+
+        if (feedback) {
+          element.innerHTML = 'Files are downloaded';
+          element.classList.add('text-success');
+        } else {
+          element.innerHTML = 'Something went wrong';
+          element.classList.add('text-danger');
+        }
+
+        tableFeedback.append(element);
+
+        setTimeout(() => {
+          tableFeedback.innerHTML = '';
+        }, 100000);
+      }
+
+      function removeResults() {
+        newSections.block = null;
+        newSections.fileNames = [];
+        rowContainer.innerHTML = '';
+      }
+
+      function renderSheetTitles(sheetNames, curSheetName = '') {
+        sheetNamesContainer.innerHTML = '';
+
+        const plug = document.createElement('option');
+        plug.setAttribute('value', '');
+        plug.setAttribute('disabled', true);
+        plug.setAttribute('selected', true);
+        plug.innerText = 'Choose sheet name';
+        sheetNamesContainer.append(plug);
+
+        sheetNames.forEach((name) => {
+          const optionEl = document.createElement('option');
+          optionEl.setAttribute('value', name);
+          curSheetName &&
+            name === curSheetName &&
+            optionEl.setAttribute('selected', true);
+          optionEl.innerText = name;
+          sheetNamesContainer.append(optionEl);
+        });
+      }
+
+      function changeLabelStatus(fileName, status = '') {
+        console.log(status, fileName);
+        console.log(rowContainer);
+
+        const downloadLabel = rowContainer.querySelector(`[data-id=_${fileName}] span`);
+
+        console.log(downloadLabel);
+
+        switch (status) {
+          case 'start':
+            downloadLabel.classList.remove('bg-light', 'bg-error', 'bg-success');
+            downloadLabel.innerText = 'Downloading';
+
+            downloadLabel.classList.add('bg-warning');
+            break;
+          case 'success':
+            downloadLabel.classList.remove('bg-light', 'bg-warning', 'bg-error');
+            downloadLabel.classList.add('bg-success');
+            downloadLabel.innerText = 'Succeed';
+
+            break;
+          case 'error':
+            console.log("I'm in error");
+            downloadLabel.classList.remove('bg-light', 'bg-warning', 'bg-success');
+            downloadLabel.innerText = 'Error';
+
+            downloadLabel.classList.add('bg-danger');
+            break;
+
+          default:
+            downloadLabel.classList.remove('bg-warning', 'bg-error', 'bg-success');
+            downloadLabel.classList.add('bg-light');
+            downloadLabel.innerText = 'Waiting';
+
+            break;
+        }
+
+        // const downloadLabels = rowContainer.querySelectorAll('tr>td>span');
+        // downloadLabels.forEach((label) => {
+        //   label.classList.remove('bg-light');
+        //   label.classList.add('bg-warning');
+        // });
+      }
+    </script>
+  </body>
+</html>
