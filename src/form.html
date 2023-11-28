@@ -338,10 +338,10 @@
       });
 
       downloadBtn.addEventListener('click', async () => {
+        newSections.fileNames.forEach((fileName) => changeLabelStatus(fileName));
+
         if (newSections.block && newSections.fileNames.length) {
-          console.log(newSections);
           const foldersPaths = await api.checkFolders(newSections);
-          console.log(foldersPaths);
 
           if (foldersPaths.searchingPath && foldersPaths.destinationFolderPath) {
             for (const fileName of newSections.fileNames) {
@@ -351,7 +351,6 @@
                 foldersPaths,
                 fileName,
               });
-              console.log(res);
               changeLabelStatus(fileName, res ? 'success' : 'error');
             }
 
@@ -525,28 +524,21 @@
       }
 
       function changeLabelStatus(fileName, status = '') {
-        console.log(status, fileName);
-        console.log(rowContainer);
-
         const downloadLabel = rowContainer.querySelector(`[data-id=_${fileName}] span`);
-
-        console.log(downloadLabel);
-
         switch (status) {
           case 'start':
-            downloadLabel.classList.remove('bg-light', 'bg-error', 'bg-success');
+            downloadLabel.classList.remove('bg-light', 'bg-danger', 'bg-success');
             downloadLabel.innerText = 'Downloading';
 
             downloadLabel.classList.add('bg-warning');
             break;
           case 'success':
-            downloadLabel.classList.remove('bg-light', 'bg-warning', 'bg-error');
+            downloadLabel.classList.remove('bg-light', 'bg-warning', 'bg-danger');
             downloadLabel.classList.add('bg-success');
             downloadLabel.innerText = 'Succeed';
 
             break;
           case 'error':
-            console.log("I'm in error");
             downloadLabel.classList.remove('bg-light', 'bg-warning', 'bg-success');
             downloadLabel.innerText = 'Error';
 
@@ -554,7 +546,7 @@
             break;
 
           default:
-            downloadLabel.classList.remove('bg-warning', 'bg-error', 'bg-success');
+            downloadLabel.classList.remove('bg-warning', 'bg-danger', 'bg-success');
             downloadLabel.classList.add('bg-light');
             downloadLabel.innerText = 'Waiting';
 

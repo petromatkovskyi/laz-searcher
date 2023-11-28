@@ -6,16 +6,14 @@ const fs = require('fs');
 const { google } = require('googleapis');
 const path = require('path');
 const { exec } = require('child_process');
-// const Auth = require(path.join(__dirname + '/Auth.js'));
-// const auth = new Auth();
 
-const SCOPES = [
-  // 'https://www.googleapis.com/auth/drive.file',
-  'https://www.googleapis.com/auth/spreadsheets',
-];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const { operators } = require(path.join(__dirname + '/OPERATORS.json'));
-const TOKEN_PATH = path.join(__dirname + '/token.json');
-const SETUP_PATH = path.join(__dirname + '/setup.json');
+// const TOKEN_PATH = path.join(__dirname + '/token.json');
+// const SETUP_PATH = path.join(__dirname + '/setup.json');
+const SETUP_PATH = path.join(app.getPath('userData'), 'setup.json');
+const TOKEN_PATH = path.join(app.getPath('userData'), 'token.json');
+
 const CREDENTIALS_PATH = path.join(__dirname + '/cred/credentials.json');
 
 let mainWindow;
@@ -107,12 +105,19 @@ ipcMain.handle('saveSetups', (req, data) => {
     pathType &&
     operators.includes(operatorName)
   ) {
-    fs.writeFile(SETUP_PATH, JSON.stringify(data), (err) => {
+    fs.writeFileSync(SETUP_PATH, JSON.stringify(data), (err) => {
       if (err) {
         console.error('Error saving setups: ', err.message);
       }
       console.log('Setups stored in setup.json');
     });
+
+    // fs.writeFile(SETUP_PATH, JSON.stringify(data), (err) => {
+    //   if (err) {
+    //     console.error('Error saving setups: ', err.message);
+    //   }
+    //   console.log('Setups stored in setup.json');
+    // });
 
     return { success: true, message: 'Setups are saved' };
   } else if (operators.includes(operatorName)) {
@@ -364,7 +369,13 @@ async function checkFolders(req, data) {
 
       const lastFolderPath = path.join(blockPath, lastFolder);
 
-      if (isDirectoryEmpty(lastFolderPath)) {
+      console.log('laz', lastFolderPath, !isDirectoryHas('.laz', lastFolderPath));
+      console.log('las', !isDirectoryHas('.las', lastFolderPath));
+
+      if (
+        !isDirectoryHas('.laz', lastFolderPath) &&
+        !isDirectoryHas('.las', lastFolderPath)
+      ) {
         destinationFolderPath = lastFolderPath;
       } else {
         const nextFolderNumber = parseInt(lastFolder) + 1;
@@ -435,10 +446,11 @@ async function downloadFile(req, data) {
   }
 }
 
-function isDirectoryEmpty(directoryPath) {
+function isDirectoryHas(type, directoryPath) {
+  const regex = new RegExp(`${type}$`);
   try {
     const files = fs.readdirSync(directoryPath);
-    return files.length === 0;
+    return files.some((file) => regex.test(file));
   } catch (error) {
     console.error('Error checking if directory is empty:', error.message);
     return false;
@@ -467,7 +479,7 @@ laszip -i *.laz -olas
 del *.laz  rem
 exit`;
 
-  const batFilePath = path.join(destinationFolderPath, 'laz_to_las.bat');
+  const batFilePath = path.join(destinationFolderPath, 'laz-searcher_laz_to_las.bat');
 
   fs.writeFileSync(batFilePath, batContent);
 
@@ -476,26 +488,14 @@ exit`;
 
 async function unArchive(req, folderPath) {
   try {
-    console.log('startUnArchive 466');
-    //! check how reading should work
-    // const files = await fs.readdir(folderPath, async (err) => {
-    //   if (err) {
-    //     console.error('error:', err);
-    //   } else {
-    //     console.log('success');
-    //   }
-    // });
-    // if (files.length === 0) {
-    //   console.log(`folder '${folderPath}' is empty.`);
-    //   return;
-    // }
-
     const sourceFilesFolder = path.join(__dirname, '/serviceFiles');
     const targetFilesFolder = folderPath;
 
+    if (!isDirectoryHas('.laz', targetFilesFolder)) return null;
+
     await copyFiles(sourceFilesFolder, targetFilesFolder, ['laszip.exe']);
 
-    const batFilePath = path.join(targetFilesFolder, 'laz_to_las.bat');
+    const batFilePath = path.join(targetFilesFolder, 'laz-searcher_laz_to_las.bat');
 
     createBatFile(targetFilesFolder);
 
@@ -514,5 +514,3 @@ async function unArchive(req, folderPath) {
 appExpress.listen(3000, () => {
   console.log('app is listening on port 3000');
 });
-
-// відслідуовувати кожен завантажуваний файл окремо і після загрузки всіх вставити файли для розпаковки і розпакувати файли

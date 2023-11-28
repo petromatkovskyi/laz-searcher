@@ -21,7 +21,6 @@ contextBridge.exposeInMainWorld('api', {
     return res;
   },
   unArchive: (path) => {
-    console.log(path);
     ipcRenderer.invoke('unArchive', path);
   },
   choosePath: async () => {

@@ -1,22 +1,22 @@
 {
   "name": "laz-searcher",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "publish": "electron-forge publish",
+    "minify": "webpack --config webpack.config.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Petro Matkovskyi",
   "license": "ISC",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "express": "^4.18.2",
-    "googleapis": "^128.0.0",
-    "multer": "^1.4.5-lts.1"
+    "googleapis": "^128.0.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.4.2",
@@ -26,6 +26,9 @@
     "@electron-forge/maker-zip": "^6.4.2",
     "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
     "electron": "26.2.4",
-    "electron-reload": "^2.0.0-alpha.1"
+    "electron-reload": "^2.0.0-alpha.1",
+    "terser-webpack-plugin": "^5.3.9",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
   }
 }

@@ -1,1 +1,9 @@
-{"rootSearchingPath":"\\\\server.mggplviv.local\\PRODUCTION\\UK2\\23034-00_LAKI_Rumunia\\B_8\\LAZ_12\\PART_1","rootDestPath":"C:\\lidar\\laki\\part_1","operatorName":"Мовяка Оксана","spreadsheetLink":"https://docs.google.com/spreadsheets/d/1HW-MFwjBWKDAd9NB_1lLV7oroOTtKdiUAIREbBFJR9A/edit?pli=1#gid=887179262","spreadsheetId":"1HW-MFwjBWKDAd9NB_1lLV7oroOTtKdiUAIREbBFJR9A","sheetName":"Облік_23034-00_LAKI_Rumunia","pathType":"direct"}
+{
+  "rootSearchingPath": "\\\\server.mggplviv.local\\PRODUCTION\\UK2\\23034-00_LAKI_Rumunia\\B_8\\LAZ_12\\PART_1",
+  "rootDestPath": "C:\\lidar",
+  "operatorName": "Мовяка Оксана",
+  "spreadsheetLink": "https://docs.google.com/spreadsheets/d/1HW-MFwjBWKDAd9NB_1lLV7oroOTtKdiUAIREbBFJR9A/edit?pli=1#gid=887179262",
+  "spreadsheetId": "1HW-MFwjBWKDAd9NB_1lLV7oroOTtKdiUAIREbBFJR9A",
+  "sheetName": "Облік_23034-00_LAKI_Rumunia",
+  "pathType": "direct"
+}
